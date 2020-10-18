@@ -1,8 +1,8 @@
 //Dupla: Heloísa e José
 
-public class Produto {
+public class Produto implements Comparable<Produto> {
 
-    private int codigo;
+    private Integer codigo;
     private String nome;
     private int quantidade;
     private double preco;
@@ -18,8 +18,16 @@ public class Produto {
         return codigo;
     }
 
+    public void setCodigo(Integer codigo) {
+        this.codigo = codigo;
+    }
+
     public String getNome() {
         return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public int getQuantidade() {
@@ -40,5 +48,10 @@ public class Produto {
 
     public String toString() {
         return this.codigo + ";" + this.nome + ";" + this.preco + ";" + this.quantidade;
+    }
+
+    //Comparação entre o nome do produto selecionado com nome do produto que é enviado como parâmetro.
+    public int compareTo(Produto o) {
+        return this.nome.toLowerCase().compareTo(o.getNome().toLowerCase());
     }
 }

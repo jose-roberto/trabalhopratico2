@@ -20,7 +20,7 @@ public class ModeloTabelaCompra extends AbstractTableModel {
         this.carrinhoCompra.add(vendido);
     }
 
-    public void removeProduto(int indice) {
+    public void removerProduto(int indice) {
         this.carrinhoCompra.remove(indice);
     }
 

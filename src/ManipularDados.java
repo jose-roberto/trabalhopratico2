@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 
@@ -21,7 +22,7 @@ public class ManipularDados {
     }
 
     //Faz a leitura dos dados e armazena-os no vetor "produtos".
-    private static void carregarArquivo() {
+    public static void carregarArquivo() {
         //Instacia o arquivo com a localização informada pelo usuário.
         arquivo = new File(auxEndereco);
 
@@ -62,6 +63,7 @@ public class ManipularDados {
 
                 //Lê a próxima linha.
                 linha = buffLeitura.readLine();
+
             }
 
             //Fecha o arquivo liberando-o para outros processos.
@@ -73,38 +75,79 @@ public class ManipularDados {
         }
     }
 
-    public static Produto consultarProduto(int codigo) {
-        //Preenche o vetor "produtos" caso ele esteja vazio.
-        if (produtos == null) {
-            carregarArquivo();
+    //Insere um novo produto cadastrado.
+    public static void inserirProduto(Produto novoProduto) {
+        produtos.add(novoProduto);
+    }
+
+    //Gera um código para o novo produto cadastrado.
+    public static int gerarCodigo() {
+        int codigo = 1;
+
+        if (!produtos.isEmpty()) {
+            codigo += produtos.lastElement().getCodigo();
         }
 
+        return codigo;
+    }
+
+    public static Produto consultarProdutoCompra(int codigo) {
         //Retorna o produto correspondente ao código que foi informado.
         for (Produto aux : produtos) {
             if (aux.getCodigo() == codigo) {
                 return aux;
             }
         }
-
         return null;
     }
 
-    public static Vector<Produto> preencherEstoque() {
-        //Preenche o vetor "produtos" caso ele esteja vazio.
-        if (produtos == null) {
-            carregarArquivo();
+    public static Vector<Produto> consultarProdutoEstoque(String nome) {
+        Vector<Produto> auxProdutos = new Vector<>();
+
+        //Se a String não estiver fazia, uma consulta específica será realizada.
+        if (nome.isEmpty()) {
+            return produtos;
+        } else {
+            for (int aux = 0; aux < produtos.size(); aux++) {
+                //Transforma todas as letras inseridas em letras minúsculas para facilitar a comparação.
+                if (produtos.get(aux).getNome().toLowerCase().startsWith(nome.toLowerCase())) {
+                    //Existindo correspondência adiciona o produto no vetor.
+                    auxProdutos.add(produtos.get(aux));
+                }
+            }
+        }
+        return auxProdutos;
+    }
+
+    //Determina que a exibição dos códigos será em ordem crescente.
+    public static void ordemCrescente() {
+        int cod[] = new int[produtos.size()];
+
+        for (int aux = 0; aux < produtos.size(); aux++) {
+            cod[aux] = produtos.get(aux).getCodigo();
         }
 
-        //Retorna o vetor "produtos".
-        return produtos;
+        Arrays.sort(cod);
+
+        for (int aux = 0; aux < produtos.size(); aux++) {
+            produtos.get(aux).setCodigo(cod[aux]);
+        }
+
+    }
+
+    //Exclui um produto do arquivo.
+    public static void deletarProduto(Produto p) {
+        for (int aux = 0; aux < produtos.size(); aux++) {
+            if (p.getCodigo() == produtos.get(aux).getCodigo()) {
+                produtos.remove(aux);
+            }
+        }
     }
 
     //Edição de dados.
     public static void atualizarArquivo() {
         arquivo = new File(auxEndereco);
-        if (produtos == null) {
-            produtos = new Vector<>();
-        }
+
         try {
             //Define que o arquivo é um arquivo de alteração.
             FileWriter escrita = new FileWriter(arquivo);

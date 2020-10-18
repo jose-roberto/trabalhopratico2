@@ -250,7 +250,7 @@ public class Compra extends javax.swing.JPanel {
                     int codigo = Integer.parseInt(txtCod.getText());
 
                     //Realiza a consulta por meio do código.
-                    produtoSelecionado = ManipularDados.consultarProduto(codigo);
+                    produtoSelecionado = ManipularDados.consultarProdutoCompra(codigo);
 
                     //Verifica se há um produto correspondente ao código informado.
                     if (produtoSelecionado != null) {
@@ -336,14 +336,14 @@ public class Compra extends javax.swing.JPanel {
 
                 //Verifica se a senha está correta.
                 if (senha.equals("ifmg")) {
-                    carrinhoCompra.removeProduto(linha);
+                    carrinhoCompra.removerProduto(linha);
                     atualizaPrecoParcial_Total();
                 } else {
                     JOptionPane.showMessageDialog(null, "Senha incorreta!", "Autorização", JOptionPane.WARNING_MESSAGE);
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "Nenhum produto foi selecionado.", "ERRO", JOptionPane.WARNING_MESSAGE);
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Nenhum produto foi selecionado.", "ERRO", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_jB_removerMouseClicked
 
@@ -352,7 +352,7 @@ public class Compra extends javax.swing.JPanel {
         auxProduto = carrinhoCompra.getCarrinhoCompra();
 
         for (int aux = 0; aux < auxProduto.size(); aux++) {
-            produtoEstoque = ManipularDados.consultarProduto(auxProduto.get(aux).getCodigo());
+            produtoEstoque = ManipularDados.consultarProdutoCompra(auxProduto.get(aux).getCodigo());
 
             if (auxProduto.get(aux).getQuantidade() > produtoEstoque.getQuantidade()) {
                 JOptionPane.showMessageDialog(null, "A quantidade do produto " + ("'") + produtoEstoque.getNome() + ("'") + " não é suficiente para realizar a venda.", "ERRO", JOptionPane.INFORMATION_MESSAGE);
@@ -371,7 +371,7 @@ public class Compra extends javax.swing.JPanel {
 
             //Atualiza quantidade em estoque.
             for (int aux = 0; aux < auxProduto.size(); aux++) {
-                produtoEstoque = ManipularDados.consultarProduto(auxProduto.get(aux).getCodigo());
+                produtoEstoque = ManipularDados.consultarProdutoCompra(auxProduto.get(aux).getCodigo());
 
                 produtoEstoque.setQuantidade(produtoEstoque.getQuantidade() - auxProduto.get(aux).getQuantidade());
             }
@@ -388,7 +388,7 @@ public class Compra extends javax.swing.JPanel {
 
     //Exibe a tela do estoque.
     private void jB_estoqueMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_estoqueMouseClicked
-        Principal.exibirPainel("estoque");
+        Principal.exibirPainel(new Estoque(), "estoque");
     }//GEN-LAST:event_jB_estoqueMouseClicked
 
     //A partir da nova quantidade, atualiza o preço parcial e o total.

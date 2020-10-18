@@ -2,6 +2,7 @@
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -13,12 +14,15 @@ public class Principal extends javax.swing.JFrame {
 
     //Gerencimaneto dos painéis.
     private static CardLayout painelTransicao;
-    
+
     //Responsável pela barra de rolagem.
     private static JScrollPane barraRolagem;
 
     //Variável que armazenará o endereço do arquivo onde estão regitrados os produtos.
     private static String endereco;
+
+    //Estrutura que irá otimizar o processo de transicação entre os paíneis.
+    private static HashMap<String, JPanel> paineis;
 
     public Principal() {
         initComponents();
@@ -26,6 +30,8 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void componentes() {
+        paineis = new HashMap<>();
+
         //Defini a barra de rolagem no frame.
         barraRolagem = new JScrollPane();
 
@@ -41,31 +47,38 @@ public class Principal extends javax.swing.JFrame {
         //Estabelece que na área reservada a informações serão apresentadas pelo painel "painelBase".
         barraRolagem.setViewportView(painelBase);
 
-        //Adiciona os outros dois painéis no painel base.
-        //By: Nics.
-        painelBase.add(new Compra(), "compra");
-        painelBase.add(new Estoque(), "estoque");
-
         //Define o primeiro painel que será exibido.
-        painelTransicao.show(painelBase, "compra");
+        exibirPainel(new Compra(), "compra");
 
         enderecoArquivo();
+
+        ManipularDados.ordemCrescente();
     }
 
     //Método utilizado no processo de troca entre os painéis existentes.
-    public static void exibirPainel(String nome) {
+    public static void exibirPainel(JPanel novoPainel, String nome) {
+        //Se o painel for diferente de "null", significa que o usuário ainda não interajiu com ele.
+        //Caso contrário, quer dizer que o painel já foi utilizado.
+        if (novoPainel != null && (!paineis.containsKey(nome))) {
+            //Adiciona o painel.
+            painelBase.add(novoPainel, nome);
+
+            paineis.put(nome, novoPainel);
+        }
+
         //Exibe o painel.
         painelTransicao.show(painelBase, nome);
 
         //Garante a permanência do tamanho dos painéis durante as transições.
-        painelBase.setPreferredSize(painelBase.getPreferredSize());
+        painelBase.setPreferredSize(paineis.get(nome).getPreferredSize());
     }
 
-    //Obtém a localização do arquivo 'csv'.
-    private static void enderecoArquivo() {
+    //Obtém a localização do arquivo '.csv'.
+    public static void enderecoArquivo() {
         endereco = JOptionPane.showInputDialog(null, "Por favor, insira a localização do arquivo '.csv': ", "Localização", JOptionPane.INFORMATION_MESSAGE);
 
         ManipularDados.criarArquivo(endereco);
+        ManipularDados.carregarArquivo();
     }
 
     @SuppressWarnings("unchecked")
@@ -83,11 +96,11 @@ public class Principal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 760, Short.MAX_VALUE)
+            .addGap(0, 723, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 460, Short.MAX_VALUE)
+            .addGap(0, 535, Short.MAX_VALUE)
         );
 
         pack();
