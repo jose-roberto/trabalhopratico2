@@ -119,7 +119,7 @@ public class Cadastro extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jB_cancelarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_cancelarMouseClicked
-
+            janela.setVisible(false);
     }//GEN-LAST:event_jB_cancelarMouseClicked
 
     private void jB_salvarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jB_salvarMouseClicked
